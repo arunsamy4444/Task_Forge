@@ -1,46 +1,34 @@
-# send_reminders_daily.py
-
 import os
 from datetime import datetime, timedelta, timezone
 from pymongo import MongoClient
 from bson import ObjectId
-from dotenv import load_dotenv
 import yagmail
 
-# Load environment variables
-load_dotenv()
-
+# Environment variables (set in Cloud Functions runtime)
 MONGO_URI = os.getenv("MONGO_URI")
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
 
-if not MONGO_URI or not EMAIL_USER or not EMAIL_PASS:
-    raise ValueError("Missing environment variables")
-
-# MongoDB setup
 client = MongoClient(MONGO_URI)
 db = client.get_database()
 tasks_col = db["tasks"]
 logs_col = db["logs"]
 users_col = db["users"]
-
-# Email client
 yag = yagmail.SMTP(EMAIL_USER, EMAIL_PASS)
 
-def task_remind():
+def send_task_reminders(request=None):
+    """Cloud Function entry point"""
     now_utc = datetime.now(timezone.utc)
     today_utc = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
     tomorrow_utc = today_utc + timedelta(days=1)
 
     # Mark overdue tasks
-    overdue_result = tasks_col.update_many(
+    tasks_col.update_many(
         {"dueDate": {"$lt": today_utc}, "status": {"$ne": "completed"}},
         {"$set": {"status": "overdue"}}
     )
-    if overdue_result.modified_count > 0:
-        print(f"⚠️ Marked {overdue_result.modified_count} task(s) as overdue")
 
-    # Fetch pending tasks
+    # Send reminders
     tasks_due = tasks_col.find({
         "dueDate": {"$lt": tomorrow_utc},
         "status": {"$in": ["pending", "in-progress"]}
@@ -52,17 +40,9 @@ def task_remind():
             continue
 
         subject = f"Reminder: Task '{task.get('title')}' is due soon!"
-        body = (
-            f"Hello {user.get('username')},\n\n"
-            f"Your task '{task.get('title')}' is due on {task.get('dueDate')}.\n"
-            "Please complete it on time.\n\n"
-            "- TaskForge Reminder Bot"
-        )
-
+        body = f"Hello {user.get('username')},\nYour task '{task.get('title')}' is due on {task.get('dueDate')}.\n- TaskForge Bot"
         try:
             yag.send(to=user["email"], subject=subject, contents=body)
-            print(f"✅ Reminder sent to {user['email']} for task '{task['title']}'")
-
             logs_col.insert_one({
                 "userId": ObjectId(task["createdBy"]),
                 "action": "reminder_sent",
@@ -72,10 +52,10 @@ def task_remind():
                 "updatedAt": datetime.now(timezone.utc)
             })
         except Exception as e:
-            print(f"❌ Failed to send email for task '{task['title']}': {e}")
+            print(f"Failed to send email: {e}")
 
-if __name__ == "__main__":
-    task_remind()
+    return "Task reminders processed."
+
 
 
 
