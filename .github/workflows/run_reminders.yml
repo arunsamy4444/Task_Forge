@@ -1,29 +1,29 @@
-name: Daily Reminder Automation
+name: Run Reminders
 
 on:
   schedule:
-    - cron: "30 9 * * *"   # Runs 3 PM IST (9:30 AM UTC)
-  workflow_dispatch:
+    # Every 2 minutes (GitHub cron syntax)
+    - cron: "*/2 * * * *"
+  workflow_dispatch: # lets you run manually
 
 jobs:
-  run-python:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install -r automation/requirements.txt
+        run: pip install pymongo
 
-      - name: Run reminder script
-        run: python automation/send_reminders.py
+      - name: Run script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        run: python send_reminders.py
