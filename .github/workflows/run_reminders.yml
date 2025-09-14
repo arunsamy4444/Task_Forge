@@ -2,28 +2,33 @@ name: Run Reminders
 
 on:
   schedule:
-    # Every 2 minutes (GitHub cron syntax)
+    # Every 2 minutes for testing
     - cron: "*/2 * * * *"
-  workflow_dispatch: # lets you run manually
+  workflow_dispatch: # allows manual run
 
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      # 1. Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      # 2. Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: pip install pymongo
+      # 3. Install dependencies
+      - name: Install Python dependencies
+        run: pip install pymongo yagmail
 
-      - name: Run script
+      # 4. Run your reminder script
+      - name: Run send_reminders.py
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-        run: python send_reminders.py
+        run: python automation/send_reminders.py
