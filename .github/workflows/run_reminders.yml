@@ -2,8 +2,8 @@ name: Run Reminders
 
 on:
   schedule:
-    # Every 2 minutes for testing
-    - cron: "*/2 * * * *"
+    # Every day at 3:00 PM IST (UTC+5:30 = 9:30 AM UTC)
+    - cron: "30 9 * * *"
   workflow_dispatch: # allows manual run
 
 jobs:
