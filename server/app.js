@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
@@ -7,6 +8,9 @@ const taskRoutes = require("./routes/taskRoutes");
 
 dotenv.config();
 const app = express();
+
+// Enable CORS for all routes (or restrict origin if needed)
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // Connect to MongoDB
 mongoose

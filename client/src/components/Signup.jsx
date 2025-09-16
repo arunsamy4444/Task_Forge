@@ -1,97 +1,41 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { authAPI } from '../services/api'; // Make sure this import is also correct
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { signup } from "../services/api";
+import "../styles/Signup.css";
 
+function Signup() {
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [message, setMessage] = useState("");
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    role: 'user',
-  });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
+    setMessage("");
     try {
-      await authAPI.signup(
-        formData.username,
-        formData.email,
-        formData.password,
-        formData.role
-      );
-      navigate('/login');
+      const data = await signup(form.username, form.email, form.password);
+      setMessage(data.message || "Signup successful!");
+      setForm({ username: "", email: "", password: "" });
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      setMessage(err.message || "Error occurred");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Sign Up</h2>
-      {error && <div className="error">{error}</div>}
+    <div className="form-container">
+      <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Role</label>
-          <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creating Account...' : 'Sign Up'}
-        </button>
+        <input type="text" name="username" placeholder="Username" value={form.username} onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
+        <button type="submit">Signup</button>
       </form>
+      {message && <p>{message}</p>}
       <p>
-        Already have an account? <Link to="/login">Login</Link>
+        Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>
   );
-};
+}
 
 export default Signup;

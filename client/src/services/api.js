@@ -1,68 +1,27 @@
-const API_BASE = 'http://localhost:5000/api';
+const API_URL = "http://localhost:5000/api/auth";
 
-async function apiRequest(endpoint, options = {}) {
-  const token = localStorage.getItem('token');
-  const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    ...options,
-    headers,
+// Signup request
+export const signup = async (username, email, password, role = "user") => {
+  const res = await fetch(`${API_URL}/signup`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, email, password, role }),
   });
 
-  if (response.status === 401) {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-    return;
-  }
-
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
-  }
-
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Signup failed");
   return data;
-}
-
-export const authAPI = {
-  login: (email, password) => 
-    apiRequest('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    }),
-  
-  signup: (username, email, password, role) => 
-    apiRequest('/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify({ username, email, password, role }),
-    }),
 };
 
-export const tasksAPI = {
-  getAll: () => apiRequest('/tasks'),
-  create: (taskData) => 
-    apiRequest('/tasks', {
-      method: 'POST',
-      body: JSON.stringify(taskData),
-    }),
-  update: (id, taskData) => 
-    apiRequest(`/tasks/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(taskData),
-    }),
-  delete: (id) => 
-    apiRequest(`/tasks/${id}`, {
-      method: 'DELETE',
-    }),
-};
+// Login request
+export const login = async (email, password) => {
+  const res = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
 
-export const logsAPI = {
-  getAll: () => apiRequest('/tasks/logs/all'),
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Login failed");
+  return data;
 };

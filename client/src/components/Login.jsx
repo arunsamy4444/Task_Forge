@@ -1,76 +1,58 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Fixed import path
-import { authAPI } from '../services/api';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../services/api";
+import "../styles/Login.css";
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  const { login } = useAuth();
+function Login() {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
+    setMessage("");
     try {
-      const response = await authAPI.login(formData.email, formData.password);
-      login(response.token);
-      navigate('/tasks');
+      const data = await login(form.email, form.password);
+      localStorage.setItem("token", data.token);
+
+      // Redirect to dashboard after successful login
+      navigate("/dashboard"); // <-- change to your actual dashboard route
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      // Better error handling
+      setMessage(err.response?.data?.message || err.message || "Invalid credentials");
     }
   };
 
   return (
-    <div className="auth-container">
+    <div className="form-container">
       <h2>Login</h2>
-      {error && <div className="error">{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Login</button>
       </form>
+      {message && <p>{message}</p>}
       <p>
-        Don't have an account? <Link to="/signup">Sign up</Link>
+        Don’t have an account? <Link to="/signup">Signup here</Link>
       </p>
     </div>
   );
-};
+}
 
 export default Login;
