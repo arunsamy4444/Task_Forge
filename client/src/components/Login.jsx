@@ -16,41 +16,44 @@ function Login() {
     try {
       const data = await login(form.email, form.password);
       localStorage.setItem("token", data.token);
-
-      // Redirect to dashboard after successful login
-      navigate("/dashboard"); // <-- change to your actual dashboard route
+      navigate("/dashboard");
     } catch (err) {
-      // Better error handling
       setMessage(err.response?.data?.message || err.message || "Invalid credentials");
     }
   };
 
   return (
-    <div className="form-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      {message && <p>{message}</p>}
-      <p>
-        Don’t have an account? <Link to="/signup">Signup here</Link>
-      </p>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <h2>Login</h2>
+        </div>
+        <form onSubmit={handleSubmit} className="login-form">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            className="form-input"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            className="form-input"
+            required
+          />
+          <button type="submit" className="login-button">Login</button>
+        </form>
+        {message && <p className="message error-message">{message}</p>}
+        <p className="signup-prompt">
+          Don't have an account? <Link to="/signup" className="signup-link">Signup here</Link>
+        </p>
+      </div>
     </div>
   );
 }

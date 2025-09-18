@@ -5,6 +5,8 @@ import "../styles/Dashboard.css";
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -24,38 +26,145 @@ function Dashboard() {
       return;
     }
 
-    // Fetch tasks
-    fetch("http://localhost:5000/api/tasks", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setTasks(data))
-      .catch((err) => console.error(err));
+    fetchTasks();
   }, [navigate, token]);
 
-  return (
-    <div className="container">
-      <h1>Dashboard</h1>
-      <p>Logged in as: <strong>{role}</strong></p>
-      <Link to="/add-task">
-        <button>Add Task</button>
-      </Link>
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:5000/api/tasks", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch tasks");
+      const data = await res.json();
+      setTasks(data);
+    } catch (err) {
+      console.error(err);
+      setError("Could not load tasks");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      <h2>Tasks</h2>
-      {tasks.length === 0 ? (
-        <p>No tasks found</p>
-      ) : (
-        <ul>
-          {tasks.map((task) => (
-            <li key={task._id} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
-              <h3>{task.title}</h3>
-              <p>{task.description || "No description"}</p>
-              <p>Status: <strong>{task.status}</strong></p>
-              {task.dueDate && <p>Due: {new Date(task.dueDate).toLocaleDateString()}</p>}
-            </li>
-          ))}
-        </ul>
-      )}
+  const updateStatus = async (taskId, newStatus) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteTask = async (taskId) => {
+    if (!window.confirm("Are you sure you want to delete this task?")) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setTasks(tasks.filter((t) => t._id !== taskId));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (loading) return (
+    <div className="dashboard-container">
+      <div className="loading-state">
+        <div className="loading-spinner"></div>
+        <p>Loading tasks...</p>
+      </div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="dashboard-container">
+      <div className="error-state">
+        <p className="error-message">{error}</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="dashboard-title">Dashboard</h1>
+          <div className="user-info">
+            <span>Logged in as:</span>
+            <span className="role-badge">{role}</span>
+          </div>
+        </div>
+
+        <div className="dashboard-actions">
+          <h2 className="tasks-title">Your Tasks</h2>
+          <Link to="/add-task" className="add-task-btn">
+            Add New Task
+          </Link>
+        </div>
+
+        {tasks.length === 0 ? (
+          <div className="empty-state">
+            <h3>No tasks found</h3>
+            <p>Get started by creating your first task!</p>
+          </div>
+        ) : (
+          <div className="tasks-grid">
+            {tasks.map((task) => (
+              <div key={task._id} className="task-card">
+                <div className="task-header">
+                  <h3 className="task-title">{task.title}</h3>
+                </div>
+                
+                {task.description && (
+                  <p className="task-description">{task.description}</p>
+                )}
+                
+                <div className="task-meta">
+                  <span className={`task-status status-${task.status}`}>
+                    <span className="status-indicator"></span>
+                    {task.status.charAt(0).toUpperCase() + task.status.slice(1).replace('-', ' ')}
+                  </span>
+                  
+                  {task.dueDate && (
+                    <span className="task-due">
+                      📅 Due: {new Date(task.dueDate).toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
+
+                {role === "user" && (
+                  <div className="task-actions">
+                    <select
+                      className="status-select"
+                      value={task.status}
+                      onChange={(e) => updateStatus(task._id, e.target.value)}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="in-progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                    </select>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteTask(task._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

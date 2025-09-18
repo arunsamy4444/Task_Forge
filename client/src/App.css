@@ -1,0 +1,328 @@
+/* App.css - Dark Futuristic Theme */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Color Variables */
+  --bg-dark: #05070a;
+  --bg-gradient: radial-gradient(circle at top, #0d1117, #05070a);
+  --card-bg: rgba(20, 25, 35, 0.95);
+  --card-border: rgba(0, 120, 255, 0.15);
+  --card-shadow: rgba(20, 20, 50, 0.6);
+  --primary-blue: #5AB0FF;
+  --primary-dark-blue: #0066CC;
+  --primary-light: #82C4FF;
+  --input-bg: #0C111A;
+  --input-border: rgba(90, 176, 255, 0.2);
+  --text-primary: #E0E6ED;
+  --text-muted: rgba(200, 200, 200, 0.6);
+  --text-placeholder: rgba(224, 230, 237, 0.55);
+  --error: #FF5C5C;
+  --error-glow: rgba(255, 60, 60, 0.5);
+  --success: #4CFF88;
+  --success-glow: rgba(60, 255, 120, 0.4);
+  --warning: #FFC04C;
+  --warning-glow: rgba(255, 180, 60, 0.4);
+  --divider-gradient: linear-gradient(90deg, transparent, #5AB0FF, transparent);
+  --shadow-glow: rgba(0, 100, 255, 0.25);
+  --hover-glow: rgba(90, 176, 255, 0.5);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Container and Layout */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card/Panel Component */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px var(--card-shadow);
+  backdrop-filter: blur(10px);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(90, 176, 255, 0.3);
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.form-input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(90, 176, 255, 0.3);
+}
+
+.form-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark-blue));
+  color: white;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-blue));
+  box-shadow: 0 6px 20px var(--hover-glow);
+  transform: translateY(-2px);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary-blue);
+  border: 1px solid var(--input-border);
+}
+
+.btn-secondary:hover {
+  background: rgba(90, 176, 255, 0.1);
+  border-color: var(--primary-blue);
+}
+
+/* Links */
+.link {
+  color: var(--primary-blue);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--divider-gradient);
+  margin: 1.5rem 0;
+  opacity: 0.5;
+}
+
+/* Alert Messages */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.alert-error {
+  background: rgba(255, 92, 92, 0.15);
+  border: 1px solid var(--error);
+  color: var(--error);
+  box-shadow: 0 0 10px var(--error-glow);
+}
+
+.alert-success {
+  background: rgba(76, 255, 136, 0.15);
+  border: 1px solid var(--success);
+  color: var(--success);
+  box-shadow: 0 0 10px var(--success-glow);
+}
+
+.alert-warning {
+  background: rgba(255, 192, 76, 0.15);
+  border: 1px solid var(--warning);
+  color: var(--warning);
+  box-shadow: 0 0 10px var(--warning-glow);
+}
+
+/* Dashboard Specific Styles */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-content {
+  padding: 2rem;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.task-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--hover-glow);
+}
+
+/* Navigation */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: rgba(90, 176, 255, 0.1);
+  color: var(--primary-blue);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .nav-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .form-input {
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+/* Animation Utilities */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.glow {
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 5px var(--shadow-glow); }
+  to { box-shadow: 0 0 20px var(--hover-glow); }
+}
