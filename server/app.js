@@ -11,23 +11,20 @@ const app = express();
 
 // Allowed origins
 const allowedOrigins = [
-  "http://localhost:3000", // dev frontend
-  "https://task-forge-a4vqhcfy6-aruns-projects-c7268ce7.vercel.app", // Vercel frontend
-  "https://task-forge-d78i.onrender.com" // optional: backend URL itself
+  "http://localhost:3000",
+  "https://task-forge-a4vqhcfy6-aruns-projects-c7268ce7.vercel.app"
 ];
 
-// Enable CORS
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman, curl, etc.
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // Postman, curl
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS policy: ${origin} not allowed`));
   },
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
 // Handle preflight requests for all routes
 app.options("*", cors({
   origin: allowedOrigins,
