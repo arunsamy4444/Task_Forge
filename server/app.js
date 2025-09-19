@@ -10,10 +10,10 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:3000",                     // dev
-  "https://task-forge-five.vercel.app",       // production frontend
-  "https://task-forge-d78i.onrender.com"      // backend Render URL (optional)
+  "http://localhost:3000", // dev frontend
+  "https://task-forge-a4vqhcfy6-aruns-projects-c7268ce7.vercel.app" // production frontend
 ];
+
 
 
 app.use(
