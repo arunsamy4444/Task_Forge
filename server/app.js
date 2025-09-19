@@ -11,8 +11,7 @@ const app = express();
 
 // Allowed origins
 const allowedOrigins = [
-  "http://localhost:3000",
-  "https://task-forge-1nbz9cqd0-aruns-projects-c7268ce7.vercel.app",
+  "http://localhost:3000"
 ];
 
 // CORS middleware
