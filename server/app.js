@@ -12,27 +12,23 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://task-forge-56ahfz5zy-aruns-projects-c7268ce7.vercel.app", 
+  "https://task-forge-56ahfz5zy-aruns-projects-c7268ce7.vercel.app",
 ];
 
+// CORS middleware
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // Postman, curl
+    if (!origin) return callback(null, true); // allow Postman, curl, etc.
     if (allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error(`CORS policy: ${origin} not allowed`));
+    callback(null, false); // block disallowed origins
   },
   credentials: true,
   methods: ["GET","POST","PUT","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-// Handle preflight requests for all routes
-app.options("*", cors({
-  origin: allowedOrigins,
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-}));
 
+// Basic middleware to parse JSON
+app.use(express.json());
 
 // Connect to MongoDB
 mongoose
@@ -43,8 +39,6 @@ mongoose
     process.exit(1);
   });
 
-// Basic middleware to parse JSON
-app.use(express.json());
 
 // Simple test route
 app.get("/", (req, res) => {
