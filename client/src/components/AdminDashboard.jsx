@@ -12,8 +12,6 @@ function AdminDashboard() {
     // Use environment variable for backend URL
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-
-
   const fetchTasks = async () => {
     try {
       setLoading(true);
