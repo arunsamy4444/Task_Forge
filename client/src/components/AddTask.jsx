@@ -13,6 +13,10 @@ function AddTask() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+    // Use environment variable or fallback to localhost
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -25,7 +29,7 @@ function AddTask() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/tasks", {
+     const res = await fetch(`${API_URL}/api/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

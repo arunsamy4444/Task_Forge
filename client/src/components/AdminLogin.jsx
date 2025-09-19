@@ -7,6 +7,10 @@ function AdminLogin() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+    // Use environment variable or fallback to localhost
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -14,7 +18,7 @@ function AdminLogin() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

@@ -10,6 +10,9 @@ function Dashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+    // Use environment variable for backend URL
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -32,7 +35,7 @@ function Dashboard() {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/tasks", {
+       const res = await fetch(`${API_URL}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch tasks");
@@ -48,7 +51,7 @@ function Dashboard() {
 
   const updateStatus = async (taskId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +68,7 @@ function Dashboard() {
   const deleteTask = async (taskId) => {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

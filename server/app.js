@@ -9,9 +9,26 @@ const taskRoutes = require("./routes/taskRoutes");
 dotenv.config();
 const app = express();
 
-// Enable CORS for all routes (or restrict origin if needed)
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+const allowedOrigins = [
+  "http://localhost:3000",                     // dev
+  "https://task-forge-five.vercel.app",       // production frontend
+  "https://task-forge-d78i.onrender.com"      // backend Render URL (optional)
+];
 
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman, curl, etc.
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `CORS policy: ${origin} not allowed`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)

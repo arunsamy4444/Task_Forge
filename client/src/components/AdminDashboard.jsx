@@ -9,10 +9,15 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+    // Use environment variable for backend URL
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+
+
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      const res = await fetch(`${API_URL}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.status === 401 || res.status === 403) navigate("/admin-login");
