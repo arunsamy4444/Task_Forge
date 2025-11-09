@@ -1,10 +1,51 @@
 
+# name: Run Reminders
+
+# on:
+#   schedule:
+#     # Daily at 7:10 PM IST → 13:40 UTC
+#     - cron: "40 13 * * *"
+#   workflow_dispatch:  # allows manual run
+
+# jobs:
+#   run:
+#     runs-on: ubuntu-latest
+    
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Setup Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: "3.11"
+
+#       - name: Install dependencies
+#         run: |
+#           cd automation
+#           pip install -r requirements.txt
+
+#       - name: Debug environment
+#         run: |
+#           echo "=== Environment Check ==="
+#           echo "MONGO_URI present: ${{ secrets.MONGO_URI != '' }}"
+#           echo "EMAIL_USER present: ${{ secrets.EMAIL_USER != '' }}"
+#           echo "EMAIL_PASS present: ${{ secrets.EMAIL_PASS != '' }}"
+
+#       - name: Run send_reminders.py
+#         env:
+#           MONGO_URI: ${{ secrets.MONGO_URI }}
+#           EMAIL_USER: ${{ secrets.EMAIL_USER }}
+#           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+#         run: |
+#           cd automation
+#           python send_reminders.py
 name: Run Reminders
 
 on:
   schedule:
-    # Daily at 7:10 PM IST → 13:40 UTC
-    - cron: "40 13 * * *"
+    # Daily at 7:02 PM IST → 13:32 UTC
+    - cron: "32 13 * * *"
   workflow_dispatch:  # allows manual run
 
 jobs:
