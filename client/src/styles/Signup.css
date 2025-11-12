@@ -408,3 +408,165 @@
     font-size: 1rem;
   }
 }
+
+/* Performance Toast Styles */
+.performance-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  animation: toastSlideIn 0.5s ease-out;
+}
+
+.toast-content {
+  background: linear-gradient(135deg, #1e3a8a, #3730a3);
+  border: 1px solid rgba(90, 176, 255, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  max-width: 350px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(90, 176, 255, 0.3);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+.toast-text {
+  flex: 1;
+  color: #E0E6ED;
+}
+
+.toast-text strong {
+  color: #5AB0FF;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.toast-text p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: rgba(224, 230, 237, 0.9);
+}
+
+.github-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: rgba(90, 176, 255, 0.2);
+  color: #82C4FF;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(90, 176, 255, 0.3);
+}
+
+.github-link:hover {
+  background: rgba(90, 176, 255, 0.3);
+  color: #5AB0FF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(90, 176, 255, 0.2);
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(224, 230, 237, 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.toast-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FF5C5C;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Toast exit animation */
+.performance-toast.toast-exit {
+  animation: toastSlideOut 0.5s ease-in forwards;
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* Responsive design for toast */
+@media (max-width: 768px) {
+  .performance-toast {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+  
+  .toast-content {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .performance-toast {
+    top: 5px;
+    right: 5px;
+    left: 5px;
+  }
+  
+  .toast-content {
+    padding: 0.8rem;
+  }
+  
+  .toast-text p {
+    font-size: 0.8rem;
+  }
+  
+  .github-link {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+}

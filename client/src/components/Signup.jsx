@@ -7,8 +7,26 @@ function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  // Show toast notification on component mount
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowToast(true);
+    }, 2000);
+
+    // Auto-hide toast after 8 seconds
+    const hideTimer = setTimeout(() => {
+      setShowToast(false);
+    }, 8000);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +44,34 @@ function Signup() {
     }
   };
 
+  const closeToast = () => {
+    setShowToast(false);
+  };
+
   return (
     <div className="signup-container">
+      {/* Performance Toast Notification */}
+      {showToast && (
+        <div className="performance-toast">
+          <div className="toast-content">
+            <div className="toast-icon">⚡</div>
+            <div className="toast-text">
+              <strong>Performance Notice</strong>
+              <p>This app is hosted on free tier. For better performance, run locally. Code available on GitHub!</p>
+              <a 
+                href="https://github.com/arunsamy4444/Task_Forge" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="github-link"
+              >
+                View on GitHub
+              </a>
+            </div>
+            <button className="toast-close" onClick={closeToast}>×</button>
+          </div>
+        </div>
+      )}
+
       <div className="signup-card">
         <div className="signup-header">
           <h2>Create Account</h2>
