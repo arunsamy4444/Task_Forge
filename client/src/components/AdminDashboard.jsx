@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getTasks } from "../services/api";
 import "../styles/AdminDashboard.css";
@@ -39,7 +39,8 @@ function AdminDashboard() {
     };
   }, []);
 
-  const fetchTasksHandler = async () => {
+  // Wrap fetchTasksHandler in useCallback to prevent infinite re-renders
+  const fetchTasksHandler = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getTasks();
@@ -51,7 +52,7 @@ function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]); // Add navigate as dependency
 
   useEffect(() => {
     if (!token || !user || user.role !== "admin") {
@@ -59,7 +60,7 @@ function AdminDashboard() {
       return;
     }
     fetchTasksHandler();
-  }, [navigate, token, user]);
+  }, [navigate, token, user, fetchTasksHandler]); // Add fetchTasksHandler to dependencies
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -76,6 +77,7 @@ function AdminDashboard() {
   const inProgressTasks = tasks.filter(task => task.status === 'in-progress').length;
   const completedTasks = tasks.filter(task => task.status === 'completed').length;
 
+  // Rest of your component remains the same...
   if (loading) return (
     <div className="admin-dashboard-container">
       {/* Performance Toast */}
