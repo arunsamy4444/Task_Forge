@@ -1,102 +1,69 @@
-﻿# TaskForge - Smart Task Management System
+# TaskForge - Workflow Automation System
 
-A full-stack task management application with automated email reminders powered by Python scripts and GitHub Actions.
-  
-**GitHub Repository:** https://github.com/arunsamy4444/Task_Forge
+A full-stack system for managing tasks and automating reminder workflows using scheduled execution and database-driven triggers.
 
-## ✨ Features
+GitHub Repository: https://github.com/arunsamy4444/Task_Forge
 
-### 🔐 Authentication
-- **User Signup & Login** - Secure JWT-based authentication
-- **Role-based Access** - Separate user and admin dashboards
-- **Session Management** - Persistent login with token storage
+## Context
 
-### 📝 Task Management
-- **Create Tasks** - Add title, description, due date, priority, and status
-- **Track Progress** - Update task status (Pending, In Progress, Completed)
-- **Delete Tasks** - Remove tasks with confirmation
-- **Visual Dashboard** - Beautiful card-based task organization
+In small teams and operational environments, task tracking is often manual or loosely managed. This leads to missed deadlines and inconsistent follow-ups.
 
-### ⏰ Smart Reminders
-- **Automated Email Alerts** - Daily reminders at 7 PM via Python scripts
-- **GitHub Actions** - Scheduled cron jobs for reliable delivery
-- **MongoDB Integration** - Tasks fetched directly from database
+This system tests a simple structure:
+task input → database storage → scheduled processing → automated notification.
 
-### 👑 Admin Features
-- **Full Task Overview** - View all users' tasks in one dashboard
-- **Statistics Dashboard** - Visual insights with task distribution
-- **Admin Access** - Requires manual role modification in database
+## Features
 
-## 🛠️ Tech Stack
+### Authentication
+- User Signup & Login (JWT-based)
+- Role-based Access (user/admin)
+- Session Management (token-based)
 
-### Frontend
-- **React** - Modern UI framework
-- **React Router** - Navigation and routing
-- **CSS3** - Custom styling with animations
-- **Vercel** - Deployment platform
-
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web application framework
-- **MongoDB** - Database for task storage
-- **JWT** - Authentication tokens
+### Task Management
+- Create tasks (title, description, due date, priority, status)
+- Update task status (Pending, In Progress, Completed)
+- Delete tasks
+- Dashboard for task visibility
 
 ### Automation
-- **Python** - Reminder script logic
-- **GitHub Actions** - Scheduled task execution
-- **SMTP** - Email delivery system
+- Scheduled execution using GitHub Actions (cron jobs)
+- Python script processes tasks daily at 7 PM
+- Fetches pending tasks from MongoDB
+- Sends email reminders via SMTP
 
-## 🎯 How It Works
+### Admin
+- View all users' tasks
+- Basic task distribution insights
+- Admin access via role update in database
 
-1. **Users sign up/login** to access their personal dashboard
-2. **Create tasks** with details and due dates
-3. **Python script runs daily at 7 PM** via GitHub Actions
-4. **System fetches pending tasks** from MongoDB
-5. **Email reminders** sent automatically to users
-6. **Admins can monitor** all tasks across the platform
+## Use Case
 
-## 🔧 Setup & Installation
+A team or supervisor can:
+- Assign and track tasks centrally
+- Store deadlines in a structured system
+- Automatically trigger reminders without manual follow-up
 
-### Prerequisites
-- Node.js
-- MongoDB
-- Python 3.x
+This reduces reliance on memory-based tracking and repeated manual communication.
 
-### Quick Start
-```bash
-# Clone repository
-git clone https://github.com/arunsamy4444/Task_Forge.git
+## Tech Stack
 
-# Install dependencies
-cd Task_Forge
-npm install
+Frontend: React, CSS3, React Router  
+Backend: Node.js, Express  
+Database: MongoDB  
+Auth: JWT  
+Automation: Python, GitHub Actions  
+Email: SMTP  
+Deployment: Vercel (frontend)
 
-# Start development server
-npm start
-```
+## How It Works
 
-## 📧 Reminder System
+1. User creates tasks with deadlines
+2. Tasks are stored in MongoDB
+3. GitHub Actions triggers a Python script daily
+4. Script fetches pending tasks
+5. Email reminders are sent automatically
 
-The automated reminder system:
-- Runs daily at **7 PM** using GitHub Actions cron jobs
-- Fetches tasks from **MongoDB database**
-- Sends **email notifications** for pending tasks
-- Uses **Python scripts** for processing logic
+## Notes
 
-## 🔐 Admin Access
-
-To enable admin features:
-1. Manually update user role to `"admin"` in MongoDB
-2. Access `/admin-dashboard` for full system overview
-3. View all user tasks and system statistics
-
-## 🌟 Key Benefits
-
-- ✅ **Simple & Intuitive** - Clean interface for easy task management
-- ✅ **Automated Reminders** - Never miss deadlines with daily emails
-- ✅ **Secure** - JWT authentication and role-based access
-- ✅ **Responsive** - Works perfectly on all devices
-- ✅ **Real-time Updates** - Instant task status changes
-
-
----
+- Designed as a prototype for workflow automation
+- Uses GitHub Actions instead of a dedicated scheduler service
+- Not intended for high-scale or real-time processing
