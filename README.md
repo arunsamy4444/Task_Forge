@@ -1,69 +1,105 @@
 # TaskForge - Workflow Automation System
 
-A full-stack system for managing tasks and automating reminder workflows using scheduled execution and database-driven triggers.
+A workflow automation prototype designed to replace manual task follow-ups with scheduled, event-driven processing using a database-backed task pipeline.
 
 GitHub Repository: https://github.com/arunsamy4444/Task_Forge
 
-## Context
+---
 
-In small teams and operational environments, task tracking is often manual or loosely managed. This leads to missed deadlines and inconsistent follow-ups.
+## System Context
 
-This system tests a simple structure:
-task input → database storage → scheduled processing → automated notification.
+In small operational teams, task tracking is often fragmented across messages, spreadsheets, or memory-based follow-ups. This leads to missed deadlines and inconsistent execution loops.
 
-## Features
+TaskForge explores a minimal automation pipeline:
 
-### Authentication
-- User Signup & Login (JWT-based)
-- Role-based Access (user/admin)
-- Session Management (token-based)
+task creation → persistent storage → scheduled evaluation → automated notification delivery
 
-### Task Management
-- Create tasks (title, description, due date, priority, status)
-- Update task status (Pending, In Progress, Completed)
-- Delete tasks
-- Dashboard for task visibility
+The goal is not UI complexity, but reliable task-state processing with automation hooks.
 
-### Automation
-- Scheduled execution using GitHub Actions (cron jobs)
-- Python script processes tasks daily at 7 PM
-- Fetches pending tasks from MongoDB
-- Sends email reminders via SMTP
+---
 
-### Admin
-- View all users' tasks
-- Basic task distribution insights
-- Admin access via role update in database
+## Core Capabilities
 
-## Use Case
+### Authentication Layer
+- JWT-based authentication system
+- Role separation (user / admin)
+- Stateless session handling using tokens
 
-A team or supervisor can:
-- Assign and track tasks centrally
-- Store deadlines in a structured system
-- Automatically trigger reminders without manual follow-up
+### Task Lifecycle Management
+- Create tasks with structured metadata (title, deadline, priority, status)
+- Update task state transitions (Pending → In Progress → Completed)
+- Delete task records
+- User-specific task dashboard for visibility
 
-This reduces reliance on memory-based tracking and repeated manual communication.
+### Automation Engine
+- Scheduled execution via GitHub Actions (cron-based trigger)
+- Python worker script runs at fixed interval (7:00 PM)
+- Queries MongoDB for pending and overdue tasks
+- Generates email notifications via SMTP
+
+### Administrative Layer
+- Global task visibility across users
+- Basic workload distribution overview
+- Role elevation handled via database-level configuration
+
+---
+
+## Design Intent
+
+The system is intentionally structured as a **lightweight workflow engine**, not a production scheduler.
+
+Key design decisions:
+- GitHub Actions used instead of dedicated job scheduler (cost + simplicity tradeoff)
+- Python worker isolated from backend to simulate event-driven processing
+- MongoDB used for flexible task state storage rather than strict relational schema
+
+---
+
+## Execution Flow
+
+1. User creates a task with metadata (deadline, priority)
+2. Task is stored in MongoDB as a persistent record
+3. GitHub Actions triggers a scheduled Python worker
+4. Worker queries for pending/overdue tasks
+5. Email notifications are dispatched via SMTP
+
+---
 
 ## Tech Stack
 
-Frontend: React, CSS3, React Router  
+Frontend: React, React Router, CSS  
 Backend: Node.js, Express  
 Database: MongoDB  
-Auth: JWT  
-Automation: Python, GitHub Actions  
-Email: SMTP  
-Deployment: Vercel (frontend)
+Authentication: JWT  
+Automation Layer: Python + GitHub Actions  
+Notification System: SMTP Email  
+Deployment: Vercel (Frontend)
 
-## How It Works
+---
 
-1. User creates tasks with deadlines
-2. Tasks are stored in MongoDB
-3. GitHub Actions triggers a Python script daily
-4. Script fetches pending tasks
-5. Email reminders are sent automatically
+## Limitations
 
-## Notes
+- No distributed job queue (single-worker execution model)
+- No retry mechanism for failed email delivery
+- Not optimized for high-frequency task updates
+- GitHub Actions introduces fixed scheduling latency
 
-- Designed as a prototype for workflow automation
-- Uses GitHub Actions instead of a dedicated scheduler service
-- Not intended for high-scale or real-time processing
+---
+
+## Use Case
+
+Designed for small operational environments where:
+
+- Tasks are manually created but need automated follow-ups
+- Deadline tracking is inconsistent across team members
+- Lightweight automation is preferred over enterprise scheduling systems
+
+---
+
+## Summary
+
+TaskForge is a prototype for exploring **workflow automation using minimal infrastructure**, focusing on:
+
+- Scheduled execution
+- State-based task processing
+- Lightweight notification automation
